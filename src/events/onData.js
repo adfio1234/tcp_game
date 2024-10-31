@@ -1,6 +1,7 @@
 import { config } from "../config/config.js";
 import { PACKET_TYPE, TOTAL_LENGTH } from "../constants/header.js";
 import { getHandlerById } from "../handlers/index.js";
+import { getUserById } from "../session/user.session.js";
 import { packetParser } from "../utils/parser/packetParser.js";
 //스트림
 export const onData = (socket) => async (data) => {
@@ -35,6 +36,13 @@ export const onData = (socket) => async (data) => {
                     {
                         
                         const {handlerId,userId,payload,sequence}=packetParser(packet);
+                        
+                        const user=getUserById(userId);
+                        //sequence 검증
+                        if(user&&user.sequence!==sequence)
+                        {
+                            console.error("잘못된 호출값 입니다.");
+                        }
                         
                         //handler가져오기
                         const handler=getHandlerById(handlerId);

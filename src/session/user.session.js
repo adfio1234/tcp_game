@@ -13,6 +13,14 @@ export const removeUser=(socket)=>{
         return userSessions.splice(index,1)[0];
     }
 }
+//서버에 저장된 sequence하나 올림
+export const getNextSequence=(id)=>{
+    const user=getUserById(id);
+    if(user){
+        return ++user.sequence;
+    }
+    return null;
+}
 
 export const getUserById=(id)=>{
     return userSessions.find((user)=>user.id===id);
