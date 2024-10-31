@@ -1,7 +1,7 @@
 import initialHandler from "./user/initial.handler.js";
 import { HANDLER_IDS } from "../constants/handlerIds.js";
 
-const handler={
+const handlers={
     [HANDLER_IDS.INITIAL]:{
         handler:initialHandler,
         protoType:'initial.InitialPacket'//handler에서 사용하는 payload의 이름

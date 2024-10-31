@@ -1,3 +1,4 @@
+import { getPrototypeNameByHandlerId } from "../../handlers/index.js";
 import { getProtoMessages } from "../../init/loadProtos.js"
 
 //최초로 데이터를 받는 onData.js에서 호출받음
@@ -18,10 +19,47 @@ export const packetParser=(data)=>{
     const handlerId=packet.handlerId;
     const userId=packet.userId;
     const clientVersion=packet.clientVersion;
-    const payload=packet.payload;
     const sequence=packet.sequence;
 
-    console.log(`clientVersion: ${clientVersion}`);
+    if(clientVersion!==config.client.version)
+    {
+        console.error('클라이언트 버전이 일치하지 않습니다.');
+    }
 
+    //payload파싱
+    const protoTypeName=getPrototypeNameByHandlerId(handlerId);
+    if(!protoTypeName){
+        console.error(`알 수 없는 핸들러 ID:${handlerId}`);
+    }
+
+    const [namespace,typeName]=protoTypeName.split('.');
+    const PayloadType=protoMessages[namespace][typeName];
+    let payload;
+
+    try{
+        payload=PayloadType.decode(packet.payload);
+    }catch(e){
+        console.error(e);
+    }
+
+    //decode할때 이러한 과정을 한번더 거침
+    const errorMessage=PayloadType.verify(payload);
+    if(errorMessage)
+    {
+        console.error(errorMessage);
+    }
+
+
+    //필드가 비어있는 경우=필수 필드 누락
+    const expectedFields=Object.keys(payloadType.fields);
+    const actualFields=Object.keys(payload);
+    //expectedFIelds에 있어야하는게 actualFields에 없으면 필수 필드 누락
+    const missingFields=expectedFields.filter((field)=>!actualFields.includes(field));
+    
+    if(missingFields.length>0)
+    {
+        console.error(`필수 필드가 누락되었습니다: ${missingFields.join(',')}`);
+    }
+    
     return {handlerId,packet,payload,sequence};
 };
