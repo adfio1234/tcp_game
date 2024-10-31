@@ -51,3 +51,9 @@ export const loadProtos=async()=>{
         console.log(`protobuf파일 로드중 오류가 발생했습니다`,error);
     }
 }
+
+
+//protoMessages원본 변경 확률줄이기위해 얕은복사해서 사용
+export const getProtoMessages=()=>{
+    return{...protoMessages};//얕은복사
+}
