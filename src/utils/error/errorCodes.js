@@ -9,6 +9,6 @@ export const ErrorCodes = {
     INVALID_PACKET:10007,
     INVALID_SEQUENCE:10008,
     GAME_NOT_FOUND:10009,
-    
+    //여기에 추가
 
-}//정해져있는 에러코드가 없어서 임의로 저장
+};//정해져있는 에러코드가 없어서 임의로 저장
