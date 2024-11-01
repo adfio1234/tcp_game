@@ -1,8 +1,10 @@
 import { HANDLER_IDS, RESPONSE_SUCCESS_CODE } from "../../constants/handlerIds.js";
 import { addUser } from "../../session/user.session.js";
+import { handlerError } from "../../utils/error/errorHandler.js";
 //DB접근을 위한 async
 const initialHandler=async({socket,userId,payload})=>{
-    const{deviceId}=payload;
+    try{
+        const{deviceId}=payload;
 
     addUser(socket,deviceId);
 
@@ -15,6 +17,9 @@ const initialHandler=async({socket,userId,payload})=>{
     );
     //처리가 끝났을떄 보내는것
     socket.write(initialResponse);
+    }catch(e){
+        handlerError(socket,e);
+    }
 }
 
 export default initialHandler;

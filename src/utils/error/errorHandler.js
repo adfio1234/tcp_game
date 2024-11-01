@@ -1,4 +1,5 @@
 import { createResponse } from "../response/createResponse.js";
+import { ErrorCodes } from "./errorCodes.js";
 
 //try catch로 에러 인식
 export const handlerError=(socket,error)=>{
