@@ -3,6 +3,7 @@ import { PACKET_TYPE, TOTAL_LENGTH } from "../constants/header.js";
 import { getHandlerById } from "../handlers/index.js";
 import { getUserById } from "../session/user.session.js";
 import { packetParser } from "../utils/parser/packetParser.js";
+
 //스트림
 export const onData = (socket) => async (data) => {
 
@@ -25,7 +26,7 @@ export const onData = (socket) => async (data) => {
             socket.buffer = socket.buffer.slice(length);
 
             console.log(`length: ${length}, packetType: ${packetType}`);
-            console.log(`packet ${packet}`);
+            console.log(`packet:  ${packet}`);
             switch (packetType) 
             {
                 case PACKET_TYPE.PING:
@@ -49,10 +50,10 @@ export const onData = (socket) => async (data) => {
 
                         await handler({socket,userId,payload});
 
-                        // console.log(`handlerId: ${handlerId}`);
-                        // console.log(`userId: ${userId}`);
-                        // console.log(`payload: ${payload}`);
-                        // console.log(`sequence: ${sequence}`);             
+                        console.log(`handlerId: ${handlerId}`);
+                        console.log(`userId: ${userId}`);
+                        console.log(`payload: ${payload}`);
+                        console.log(`sequence: ${sequence}`);             
                     }
             }
         }

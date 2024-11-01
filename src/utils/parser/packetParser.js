@@ -1,6 +1,6 @@
 import { getPrototypeNameByHandlerId } from "../../handlers/index.js";
 import { getProtoMessages } from "../../init/loadProtos.js"
-
+import {config} from'../../config/config.js';
 //최초로 데이터를 받는 onData.js에서 호출받음
 //data에 byte배열이 들어간다.
 export const packetParser=(data)=>{
@@ -15,12 +15,12 @@ export const packetParser=(data)=>{
     }catch(e){
         console.error(e);
     }
+    const handlerId=packet.handlerId;//2
+    const userId=packet.userId;//xyz
+    const clientVersion=packet.clientVersion;//1.0.0
+    const sequence=packet.sequence;//0
 
-    const handlerId=packet.handlerId;
-    const userId=packet.userId;
-    const clientVersion=packet.clientVersion;
-    const sequence=packet.sequence;
-
+    // console.log(handlerId,userId,clientVersion,sequence);
     if(clientVersion!==config.client.version)
     {
         console.error('클라이언트 버전이 일치하지 않습니다.');
@@ -28,6 +28,7 @@ export const packetParser=(data)=>{
 
     //payload파싱
     const protoTypeName=getPrototypeNameByHandlerId(handlerId);
+    // console.log(`protoTypeName: ${protoTypeName}`);
     if(!protoTypeName){
         console.error(`알 수 없는 핸들러 ID:${handlerId}`);
     }
@@ -61,5 +62,5 @@ export const packetParser=(data)=>{
         console.error(`필수 필드가 누락되었습니다: ${missingFields.join(',')}`);
     }
     
-    return {handlerId,packet,payload,sequence};
+    return {handlerId,userId,payload,sequence};
 };

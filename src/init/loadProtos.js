@@ -50,6 +50,7 @@ export const loadProtos=async()=>{
     }catch(error){
         console.log(`protobuf파일 로드중 오류가 발생했습니다`,error);
     }
+    
 }
 
 
